@@ -58,13 +58,7 @@ pipeline {
   }
 
   post{
-    always{
-      script {
-        reportName = sh(script: "ls ${env.WORKSPACE}/playwright-report", returnStdout: true)
-        echo "${reportName}"
-        echo "This is report folder path ${reportName}"
-      }   
-
+    always{ 
       publishHTML([
       allowMissing: false,
       alwaysLinkToLastBuild: true,
