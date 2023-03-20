@@ -8,7 +8,7 @@ pipeline {
     choice(
         name: 'env',
         choices: "dev\nproduction\nuat",
-        description: 'Select the evironment to run automation'),
+        description: 'Select the evironment to run automation')
     choice(
         name: 'Test',
         choices: "singapore\nvietnam",
@@ -19,7 +19,7 @@ pipeline {
   stages {
     stage('Checkout source code') {
       steps {
-        git(url: 'https://github.com/quangle232/weather-playwright-typescript', 
+        git(url: 'https://github.com/quangle232/weather-playwright-typescript.git', 
         branch: 'main', 
         credentialsId: '990cc9e7-dc83-4cbf-8259-1fe882167d48')
       }
