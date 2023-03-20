@@ -2,7 +2,7 @@ pipeline {
 
   agent any
 
-  tools {nodejs "nodejs-16"}
+  tools {nodejs "nodejs-19"}
 
   parameters {
     choice(
