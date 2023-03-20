@@ -27,7 +27,7 @@ pipeline {
 
     stage('Installing Package') {
       steps {
-        sh 'yarn install'
+        sh 'npm install'
         sh 'npx playwright install'
         sh 'npm install -g cross-env'      
       }
@@ -36,7 +36,7 @@ pipeline {
     stage("Running automation test") {
       steps {
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-           sh "cross-env test_env=${env} country=${country} npx playwright test --grep @exportJsonFile"
+           sh "cross-env test_env=${env} country=${country} npx playwright test --grep @exportJsonFile --headed"
         }   
       }
     }
