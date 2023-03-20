@@ -22,10 +22,16 @@ jobs:
           npm install -g cross-env
       - name: Run Playwright tests
         run: |
-          npm run test:retrieveTenDaysDataFromProd
+          npm run test:retrieveTenDaysDataFromSingapore
       - uses: actions/upload-artifact@v3
         if: always()
         with:
           name: playwright-report
           path: test-output/html/index.html
+          retention-days: 30
+      - uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: weather-information
+          path: weather/*.json
           retention-days: 30

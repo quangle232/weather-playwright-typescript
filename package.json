@@ -13,7 +13,7 @@
     "dotenv": "^16.0.3"
   },
   "scripts": {
-    "test:retrieveTenDaysDataFromProd": "cross-env test_env=prod npx playwright test --grep @exportJsonFile",
+    "test:retrieveTenDaysDataFromSingapore": "cross-env test_env=production country=singapore npx playwright test --grep @exportJsonFile",
     "allure:generate": "allure generate ./test-output/allure-results --clean -o ./test-output/allure-report"
   }
 }
