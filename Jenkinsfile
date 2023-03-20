@@ -19,7 +19,7 @@ pipeline {
   stages {
     stage('Checkout source code') {
       steps {
-        git(url: 'https://github.com/hitz-group/apps-e2e-automation/', 
+        git(url: 'https://github.com/quangle232/weather-playwright-typescript', 
         branch: 'main', 
         credentialsId: '990cc9e7-dc83-4cbf-8259-1fe882167d48')
       }
