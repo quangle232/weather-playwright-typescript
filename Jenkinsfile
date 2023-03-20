@@ -6,7 +6,7 @@ pipeline {
 
   parameters {
     choice(
-        name: 'env',
+        name: 'runningEnv',
         choices: "dev\nproduction\nuat",
         description: 'Select the evironment to run automation')
     choice(
@@ -36,7 +36,7 @@ pipeline {
     stage("Running automation test") {
       steps {
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-           sh "cross-env test_env=${env} country=${country} npx playwright test --grep @exportJsonFile --headed"
+           sh "cross-env test_env=${runningEnv} country=${country} npx playwright test --grep @exportJsonFile --headed"
         }   
       }
     }
