@@ -36,7 +36,7 @@ pipeline {
     stage("Running automation test") {
       steps {
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-           sh "cross-env test_env=${environments} country=${country} npx playwright test --grep @exportJsonFile --headed"
+           sh "cross-env test_env=${params.environments} country=${country} npx playwright test --grep @exportJsonFile --headed"
         }   
       }
     }
