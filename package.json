@@ -1,0 +1,19 @@
+{
+  "name": "weather-playwright-typescript",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/quangle232/weather-playwright-typescript.git",
+  "author": "Quang Le <quang.l@oolio.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.31.2",
+    "allure-commandline": "^2.21.0",
+    "allure-playwright": "^2.1.0",
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.0.3"
+  },
+  "scripts": {
+    "test:retrieveTenDaysDataFromProd": "cross-env test_env=prod npx playwright test --grep @exportJsonFile",
+    "allure:generate": "allure generate ./test-output/allure-results --clean -o ./test-output/allure-report"
+  }
+}
