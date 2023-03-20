@@ -23,7 +23,7 @@ test(`Retrieve 10 days weather information and export to data file @exportJsonFi
     });
 
     await test.step('Should export weather information to json file', async () => {
-        filePath = `weather/weather${process.env.country}_${browserName}_${generateCurrentDateTime()}`;
+        filePath = `weather/weather_${process.env.country}_${browserName}_${generateCurrentDateTime()}`;
         await exportJsonFile(jsonArray, filePath);
     });
 });

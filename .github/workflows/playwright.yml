@@ -41,15 +41,17 @@ jobs:
       - name: Run Playwright tests
         run: |
           cross-env test_env=${{inputs.environment_variant}} country=${{inputs.country_variant}} npx playwright test --grep @exportJsonFile
-      - uses: actions/upload-artifact@v3
+      - name: Upload Report Artifact    
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: playwright-report
           path: test-output/html/index.html
           retention-days: 30
-      - uses: actions/upload-artifact@v3
+      - name: Upload Weather Information Json FIle    
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: weather-information
-          path: weather/*.json
+          path: weather/
           retention-days: 30

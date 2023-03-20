@@ -107,4 +107,3 @@ dist
 /playwright/.cache/
 .DS_Store
 /test-output/
-weather/
