@@ -1,6 +1,24 @@
 name: Playwright Tests
 on:
   workflow_dispatch:
+    inputs:
+      environment_variant:
+        type: choice
+        description: Select environment to run automation (should use production). 
+        required: true
+        default: production
+        options:
+          - dev
+          - production
+          - uat
+      country_variant:
+        type: choice
+        description: Select country to run with localization. 
+        required: true
+        default: singapore
+        options:
+          - singapore
+          - vietnam
 
 jobs:
   automation-test:
@@ -22,7 +40,7 @@ jobs:
           npm install -g cross-env
       - name: Run Playwright tests
         run: |
-          npm run test:retrieveTenDaysDataFromSingapore
+          cross-env test_env=${{inputs.environment_variant}} country=${{inputs.country_variant}} npx playwright test --grep @exportJsonFile
       - uses: actions/upload-artifact@v3
         if: always()
         with:
