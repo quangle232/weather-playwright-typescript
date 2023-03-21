@@ -120,7 +120,8 @@ export class TenDayPage extends WeatherHomePage {
       jsonArray.push(jsonObject);
 
     }
-    return jsonArray.shift();
+    jsonArray.shift();
+    return jsonArray;
   }
 
   async isRowCollapsed(index: number){
