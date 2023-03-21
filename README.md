@@ -30,7 +30,7 @@ npx playwright install --with-deps
 ```
 4. If "cross-env" cannot be found on your machine, execute below command to install globaly
 ```
-npx playwright install --with-deps
+npm install -g cross-env
 ```
 
 # Running test cases
