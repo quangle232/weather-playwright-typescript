@@ -10,14 +10,15 @@ export class TenDayPage extends WeatherHomePage {
 
   readonly dailyForecastElements = {
     dateRow: (index: number) => `[id="detailIndex${index}"]`,
-    dateTitle: '[data-testid="DailyContent"] span',
+    dateTitle: '[data-testid="DailyContent"] h3 span',
     temperatureValue: '[data-testid="ConditionsSummary"] [data-testid="TemperatureValue"]',
     humidityValue: '[data-testid="HumiditySection"] [data-testid="PercentageValue"]',
   }
 
   readonly dayOrNight = {
     day: 0,
-    night: 1
+    night: 1,
+    night_only: 0
   }
 
   /* ============ Page Actions =============== */
@@ -35,12 +36,12 @@ export class TenDayPage extends WeatherHomePage {
   }
 
   async retrieveDayTitle(index: number) {
-    const dayTemperature = await this.page
+    const dailyTitle = await this.page
       .locator(this.dailyForecastElements.dateRow(index))
       .locator(this.dailyForecastElements.dateTitle)
       .nth(0)
       .innerText();
-    return dayTemperature;
+    return dailyTitle;
   }
 
   async retrieveDayTemperature(index: number) {
@@ -88,15 +89,85 @@ export class TenDayPage extends WeatherHomePage {
     return nightHumidity;
   }
 
+  async retrieveTodayWeather(){
+    const titleParentText = await this.page
+        .locator(this.dailyForecastElements.dateRow(0))
+        .locator(this.dailyForecastElements.dateTitle)
+        .locator('..')
+        .innerText();
+    const dayTitle = await this.retrieveDayTitle(0);
+    let dayTemperature = "";
+    let dayHumidity = "";
+    let nightTemperature = "";
+    let nightHumidity = "";
+
+    // 1 is only night
+    // 2 is both day and night
+    if(titleParentText.indexOf('Night')){      
+      dayTemperature = "you retrieved data at night time";
+      dayHumidity = "you retrieved data at night time";
+
+      // Index of night is 0 now => using day temperature for quick apply
+      nightTemperature = await this.retrieveDayTemperature(0);
+      nightHumidity = await this.retrieveDayHumidity(0);
+
+    } else{
+      dayTemperature = await this.retrieveDayTemperature(0);
+      dayHumidity = await this.retrieveDayHumidity(0);
+      nightTemperature = await this.retrieveNightTemperature(0);
+      nightHumidity = await this.retrieveNightHumidity(0);
+    }
+    
+    return {
+      date: dayTitle,
+      temperature: {
+        day: dayTemperature,
+        night: nightTemperature,
+      },
+      humidity: {
+        day: dayHumidity,
+        night: nightHumidity,
+      }
+    };
+  }
   
-  async retrieveWeatherInfo(numberOfDates: number) {
+  async retrieveWeatherInfo(numberOfDates: number, ignoreToday: boolean) {
     // Maximum row on web is 15
-    // Start from tomorrow, index from 1 (tomorrow) instead of 0 (today)
-    if (numberOfDates > 15 || numberOfDates == 0) {
-      numberOfDates = 15;
+        // Start from tomorrow, index from 1 (tomorrow) instead of 0 (today)
+
+        // After submitted assignment: refactor to fix no such element: Unable to locate element:[id='detailIndex15']
+    if(numberOfDates < 0){
+      numberOfDates = 0;
     }
 
+      // After submitted assignment: refactor to fix no such element: Unable to locate element: [id='detailIndex15']
+      // if number = 0 will get today weather
+
     let jsonArray = [{}];
+
+    if(ignoreToday){
+      if(numberOfDates === 0){
+          throw new Error("Cannot retrieve data if you ignore today and get today weather at the same time");
+      }
+    } else {
+        jsonArray.push(await this.retrieveTodayWeather());
+
+        if(numberOfDates === 0){
+          jsonArray.shift();
+          return jsonArray;
+        }
+
+      // Can get 15 days information include today
+        if(numberOfDates <= 15){
+          numberOfDates = numberOfDates - 1;
+        }
+
+  }
+
+  if(numberOfDates >= 15){
+    numberOfDates = 14;
+  }
+
     for (let i = 1; i <= numberOfDates; i++) {
       await this.expandDateRow(i);
       const dayTitle = await this.retrieveDayTitle(i);
@@ -109,10 +180,10 @@ export class TenDayPage extends WeatherHomePage {
         date: dayTitle,
         temperature: {
           day: dayTemperature,
-          night: dayHumidity,
+          night: nightTemperature,
         },
         humidity: {
-          day: nightTemperature,
+          day: dayHumidity,
           night: nightHumidity,
         }
       };
