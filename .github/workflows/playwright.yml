@@ -1,5 +1,7 @@
 name: Retrieve Ten Days Weather Information Tests
 on:
+  repository_dispatch:
+    type: [call-run]
   workflow_dispatch:
     inputs:
       environment_variant:
